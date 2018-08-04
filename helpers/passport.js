@@ -9,10 +9,10 @@ passport.deserializeUser(User.deserializeUser());
 
 //segunda estrategia (facebook)
 passport.use(new FacebookTokenStrategy({
-    clientID: '1799675690120298',
-    clientSecret: '3a65a6c49cece5809e8a79ebed0a6ec3'
+    clientID: process.env.FBCID,
+    clientSecret: process.env.FBSec,
   }, function(accessToken, refreshToken, profile, done) {
-    
+    console.log(profile)
     User.findOne({facebookId:profile.id})
     .then(user=>{
         if(!user) return User.create({

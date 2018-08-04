@@ -14,13 +14,12 @@ const upload = multer({dest: './public/assets'});
 
 function isAuthenticated(req,res,next){
     if(req.isAuthenticated()){
-        console.log(req.user)
+        //console.log(req.user)
         return next()
     }else{
         res.json({message:"no tienes permiso"});
     }
 }
-
 function isLoggedIn(req,res,next){
     if(req.isAuthenticated()){
         res.redirect('/private')
@@ -28,13 +27,11 @@ function isLoggedIn(req,res,next){
         next();
     }
 }
-
 router.post('/facebook/login', 
 passport.authenticate('facebook-token'),
  (req,res)=>{
     res.json(req.user)
 })
-
 // router.get('/profile', isAuthenticated, (req,res, next)=>{
 //     User.findById(req.user._id)
 //     .populate('profile')
@@ -45,12 +42,14 @@ passport.authenticate('facebook-token'),
 //     .catch(e=>next(e))
 // });
 
+
 router.get('/profile', isAuthenticated, (req,res, next)=>{
     User.findById(req.user._id)
     // .populate('profile')
     // .populate('products')
     .then(user=>{
         res.send(user);
+        //res.json(user)
     })
     .catch(e=>next(e))
 });
@@ -64,15 +63,16 @@ router.get('/logout', (req,res,next)=>{
 
 });
 
-router.get('/private', isAuthenticated, (req,res)=>{
-    //const admin = req.user.role === "ADMIN";
-    //res.json({message:"esto es privao"});
-    // Phone.find()
-    // .then(phones=>res.json(phones))
-    // .catch(e=>next(e))
-    
-    //Modificación Pablo
-    res.send("adentro");
+router.get('/loggedUser', isAuthenticated, (req,res)=>{
+    User.findById(req.user._id)
+    .populate('purchases')
+    // .populate('products')
+    .then(user=>{
+        console.log(user)
+        return res.json(user)
+        
+    })
+    .catch(e=>console.log(e))
 });
 
 // router.get('/login', isLoggedIn, (req,res)=>{
@@ -81,7 +81,7 @@ router.get('/private', isAuthenticated, (req,res)=>{
 // });
 
 router.post('/login', passport.authenticate('local'), (req,res,next)=>{
-    console.log(req.user)
+    //console.log(req.user)
     res.json(req.user);
 });
 
@@ -103,7 +103,6 @@ router.post('/signup', (req,res,next)=>{
         //res.redirect('/login')
     })
     .catch(e=>next(e));
-
 
     // if(req.body.password !== req.body.password2){
     //     req.body.error = 'escribe bien la contraseña!';

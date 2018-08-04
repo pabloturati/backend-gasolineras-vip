@@ -9,7 +9,11 @@ const userSchema = new require('mongoose').Schema({
         type:String,
         default: 'https://image.freepik.com/free-icon/male-user-profile-picture_318-37825.jpg'
     }, 
-    facebookID: String,
+    facebookId: String,
+    purchases:[{
+        type: Schema.Types.ObjectId,
+        ref: "Sale"
+    }], 
     profile:{
         type: Schema.Types.ObjectId,
         ref: 'Profile'
