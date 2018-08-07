@@ -27,7 +27,6 @@ passport.use(new FacebookTokenStrategy({
         return done(null, user)
     })
     .catch(e=>next(e))
-    
   }
 ));
 

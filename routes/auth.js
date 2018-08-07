@@ -17,7 +17,7 @@ function isAuthenticated(req,res,next){
         //console.log(req.user)
         return next()
     }else{
-        res.json({message:"no tienes permiso"});
+        res.json({message:"User not allowed. Login to see this content"});
     }
 }
 function isLoggedIn(req,res,next){
@@ -31,17 +31,8 @@ router.post('/facebook/login',
 passport.authenticate('facebook-token'),
  (req,res)=>{
     res.json(req.user)
+    console.log("FACEBOOK LOGIN POST RESULT" + req.user)
 })
-// router.get('/profile', isAuthenticated, (req,res, next)=>{
-//     User.findById(req.user._id)
-//     .populate('profile')
-//     .populate('products')
-//     .then(user=>{
-//         res.send(user);
-//     })
-//     .catch(e=>next(e))
-// });
-
 
 router.get('/profile', isAuthenticated, (req,res, next)=>{
     User.findById(req.user._id)
@@ -52,68 +43,40 @@ router.get('/profile', isAuthenticated, (req,res, next)=>{
         //res.json(user)
     })
     .catch(e=>next(e))
-});
+})
 
 router.get('/logout', (req,res,next)=>{
+    //console.log("session closed")
     req.logout();
-    res.send('cerrado ??? ');
-    // req.session.destroy(()=>{
-    //     res.redirect('/login');
-    // })
-
-});
+    req.session.destroy(()=>
+        res.send('Session Closed')
+    )
+    // console.log(req.user)
+})
 
 router.get('/loggedUser', isAuthenticated, (req,res)=>{
+    console.log("LOGGED USER POST RESULT" + req.user)
     User.findById(req.user._id)
     .populate('purchases')
-    // .populate('products')
     .then(user=>{
         console.log(user)
         return res.json(user)
         
     })
     .catch(e=>console.log(e))
-});
-
-// router.get('/login', isLoggedIn, (req,res)=>{
-//     //res.render('auth/login')
-//     res.send("hola desde login")
-// });
+})
 
 router.post('/login', passport.authenticate('local'), (req,res,next)=>{
     //console.log(req.user)
     res.json(req.user);
-});
+})
 
-
-// router.get('/signup', (req,res)=>{
-//     res.render('auth/signup');
-// });
-
-//1 crear la ruta post (recibe)
-//2 necesitamos chear las contraseñas que coincidan
-//3 crear al usuario en la db
-//upload.single('photo')
 router.post('/signup', (req,res,next)=>{
-   // req.body.photoURL = '/assets/' + req.file.filename;
     User.register(req.body, req.body.password)
     .then(user=>{
         res.json(user)
-        //sendTemplate(user);
-        //res.redirect('/login')
     })
     .catch(e=>next(e));
-
-    // if(req.body.password !== req.body.password2){
-    //     req.body.error = 'escribe bien la contraseña!';
-    //     return res.render('auth/signup', req.body)
-    // }
-    // //encriptar la contraseña
-    // const hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
-    // req.body.password = hash;
-    // User.create(req.body)
-    // .then(user=>res.send(user))
-    // .catch(e=>next(e))
 })
 
 

@@ -1,3 +1,4 @@
+
 const passportLocalMongoose = require('passport-local-mongoose');
 const Schema = require('mongoose').Schema;
 
@@ -7,28 +8,27 @@ const userSchema = new require('mongoose').Schema({
     email: String,
     photoURL:{
         type:String,
-        default: 'https://image.freepik.com/free-icon/male-user-profile-picture_318-37825.jpg'
+        default: 'https://cdn150.picsart.com/upscale-245339439045212.png?r1024x1024'
+        //default: '../public/assets/profileSample.png'
     }, 
+    address:{
+        type:String,
+        default: "Mexico City"
+    },
     facebookId: String,
     purchases:[{
         type: Schema.Types.ObjectId,
         ref: "Sale"
-    }], 
-    profile:{
-        type: Schema.Types.ObjectId,
-        ref: 'Profile'
-    },
+    }],
     role:{
         type: String,
         enum: ['USER', 'EDITOR', 'ADMIN'],
         default: 'USER'
     },
-    products:[
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Product'
-        }
-    ]
+    reports:[{
+        type: Schema.Types.ObjectId,
+        ref: "Report"
+    }]
 },{
     timestamps:{
         createdAt: 'created_at',
@@ -37,5 +37,4 @@ const userSchema = new require('mongoose').Schema({
 });
 
 userSchema.plugin(passportLocalMongoose, {usernameField:'email'})
-
 module.exports = require('mongoose').model('User', userSchema);
