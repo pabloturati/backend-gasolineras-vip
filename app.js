@@ -71,9 +71,9 @@ const index = require('./routes/index')
 const sale = require('./routes/sale')
 const report = require('./routes/report')
 const auth = require('./routes/auth')
-app.use('/sale', sale)
-app.use('/report', report)
-app.use('/', index)
-app.use('/', auth)
+app.use('/api/sale', sale)
+app.use('/api/report', report)
+app.use('/api/', index)
+app.use('/api/', auth)
 
 module.exports = app;
