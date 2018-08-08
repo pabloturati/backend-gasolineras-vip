@@ -4,7 +4,6 @@ const Sale = require('../models/Sale')
 const isAuthenticated =require('./auth')
 const User = require('../models/User')
 
-
 //Returns all sales
 router.get('/', (req, res) => {
     Sale.find()
@@ -13,7 +12,6 @@ router.get('/', (req, res) => {
     })
     .catch(e => next(e))
 });
-
 //Post new sale with it's user
 router.post('/', (req, res) => {
     console.log('el user', req.user)
@@ -33,24 +31,34 @@ router.post('/', (req, res) => {
         return res.status(500).json(err)
     })                 
 })
+//get one sale
+router.get('/:id', (req, res) => {
+    Sale.findById(req.params.id)
+        .then(sale => {
+            if (!sale) return res.status(404)
+            return res.status(200).json(sale);
+        })
+        .catch(err => {
+            return res.status(500).json(err);
+        });
+});
+//Delete sale
+router.delete('/:id', (req, res, next) => {
+    Sale.findByIdAndRemove(req.params.id)
+        .then(sale => {
+            res.status(200).json(sale)
+        })
+        .catch(e=>{
+            res.status(500).json({message:"delete failed"})
+            next(e)
+        });
+});
+
 
 module.exports = router
 
-//HASTA AQUI TODO FUNCIONA
-// //get one phone
-// router.get('/:id', (req, res) => {
-//     Phone.findById(req.params.id)
-//         .then(phone => {
-//             if (!phone) return res.status(404)
-//             return res.status(200).json(phone);
-//         })
-//         .catch(err => {
-//             return res.status(500).json(err);
-//         });
-// });
 
-
-// //edit a phone
+// EDIT A SALE. Not implemented
 // /* 
 //     this route make an update to the model phone, 
 //     but respect the filed even when they don't come in the update
@@ -62,18 +70,6 @@ module.exports = router
 //         }).catch(err => {
 //             return res.status(404).json(err);
 //         });
-
 // })
-// //delete a phone
 
-// router.delete('/:id', (req, res, next) => {
-//     Phone.findByIdAndRemove(req.params.id)
-//         .then(phone => {
-//             res.status(200).json(phone)
-//         })
-//         .catch(e=>{
-//             res.status(500).json({message:"algo falló"})
-//             next(e)
-//         });
-// });
 

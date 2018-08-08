@@ -5,9 +5,25 @@ const isAuthenticated =require('./auth')
 const User = require('../models/User')
 
 
-//Returns all emergency reports - NOT USED
+//Returns all emergency reports
 router.get('/', (req, res) => {
     Report.find()
+    .then(report => {
+        return res.status(200).json(report); //200: The request was fulfilled.                       
+    })
+    .catch(e => next(e))
+});
+//Find one report
+router.get('/:id', (req, res) => {
+    Report.findById(req.params.id)
+    .then(report => {
+        return res.status(200).json(report); //200: The request was fulfilled.                       
+    })
+    .catch(e => next(e))
+});
+//Find one report and cancel it
+router.patch('/:id', (req, res) => {
+    Report.findByIdAndUpdate(req.params.id,{orderStatus: "cancelled"}, {new: true})
     .then(report => {
         return res.status(200).json(report); //200: The request was fulfilled.                       
     })
@@ -16,7 +32,6 @@ router.get('/', (req, res) => {
 
 //Post new report
 router.post('/', (req, res) => {
-
     //Get the report item from the frontend package (req.body)
     let thisItem = req.body
 

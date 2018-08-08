@@ -1,15 +1,7 @@
 const router = require('express').Router();
 const User = require('../models/User');
-// const Phone = require('../models/Phone')
-// const Profile = require('../models/Profile');
-// const Product = require('../models/Product');
-//const bcrypt = require('bcrypt');
 const passport = require('passport');
-//const sendWelcomeMail = require('../helpers/mailer').sendWelcomeMail;
-//const sendTemplate = require('../helpers/mailer').sendTemplate;
-//multer config
-const multer = require('multer');
-const upload = multer({dest: './public/assets'});
+
 
 
 function isAuthenticated(req,res,next){
@@ -31,7 +23,7 @@ router.post('/facebook/login',
 passport.authenticate('facebook-token'),
  (req,res)=>{
     res.json(req.user)
-    console.log("FACEBOOK LOGIN POST RESULT" + req.user)
+    // console.log("FACEBOOK LOGIN POST RESULT" + req.user)
 })
 
 router.get('/profile', isAuthenticated, (req,res, next)=>{
@@ -55,11 +47,11 @@ router.get('/logout', (req,res,next)=>{
 })
 
 router.get('/loggedUser', isAuthenticated, (req,res)=>{
-    console.log("LOGGED USER POST RESULT" + req.user)
+    // console.log("LOGGED USER POST RESULT" + req.user)
     User.findById(req.user._id)
     .populate('purchases')
     .then(user=>{
-        console.log(user)
+        // console.log(user)
         return res.json(user)
         
     })

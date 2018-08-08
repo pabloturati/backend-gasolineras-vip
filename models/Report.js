@@ -15,8 +15,14 @@ const reportSchema = new Schema({
         enum: ["open","closed"],
         default: "open"
     },
-    attendedBy: String,
-    attendedDate: String
+    attendedBy:{
+        type: String,
+        default: "TBD"
+    },
+    attendedDate:{
+        type: String,
+        default: "Pending"
+    }
 },{
     timestamps:{
         createdAt:'created_at',

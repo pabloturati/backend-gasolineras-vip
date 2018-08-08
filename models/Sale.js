@@ -13,11 +13,17 @@ const saleSchema = new Schema({
     installDetail: String,
     orderStatus:{
         type: String,
-        enum: ["open","closed"],
+        enum: ["open","closed","cancelled"],
         default: "open"
     },
-    servicedBy: String,
-    serviceDate: String
+    servicedBy:{
+        type: String,
+        default: "Pending assignation"
+    },
+    servicedDate: {
+        type:String,
+        default: "Not yet completed"
+    }
 },{
     timestamps:{
         createdAt:'created_at',
