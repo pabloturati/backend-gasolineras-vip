@@ -3,8 +3,8 @@ const router  = express.Router();
 
 /* GET home page */
 router.get('/', (req, res, next) => {
-  res.render('index');
-  // res.sendFile(path.join(__dirname, '../public/index.html'))
+  // res.render('index');
+  res.sendFile(path.join(__dirname, '../public/index.html'))
 });
 
 module.exports = router;
